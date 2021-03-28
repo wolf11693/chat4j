@@ -1,41 +1,42 @@
 package org.ra.model;
 
+/**
+ * This model rapresents a chat
+ * with relative idChatRoom where is cointained it
+ * */
 public class ExtendedChatModel {
 
-	private String idChatUserModel;
+	private String idChatRoom;
 	private ChatModel chatModel;
 	
 	public ExtendedChatModel() {
 		super();
 	}
 
-	public String getIdChatUserModel() {
-		return idChatUserModel;
+	public String getIdChatRoom() {
+		return idChatRoom;
 	}
 
-	public ExtendedChatModel setIdChatUserModel(String idChatUserModel) {
-		this.idChatUserModel = idChatUserModel;
-		return this;
+	public void setIdChatRoom(String idChatRoom) {
+		this.idChatRoom = idChatRoom;
 	}
 
 	public ChatModel getChatModel() {
 		return chatModel;
 	}
 
-	public ExtendedChatModel setChatModel(ChatModel chatModel) {
+	public void setChatModel(ChatModel chatModel) {
 		this.chatModel = chatModel;
-		return this;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("ExtendedChatModel [idChatUserModel=");
-		builder.append(idChatUserModel);
+		builder.append("ExtendedChatModel [idChatRoom=");
+		builder.append(idChatRoom);
 		builder.append(", chatModel=");
 		builder.append(chatModel);
 		builder.append("]");
 		return builder.toString();
 	}
-	
 }
