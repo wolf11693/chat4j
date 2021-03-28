@@ -35,7 +35,7 @@ public class RestExceptionHandler {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(RestExceptionHandler.class);
 	
-	@ExceptionHandler(value = {Exception.class})
+	@ExceptionHandler()
 	public ResponseEntity<ResponseMessage> exceptionHandler(Exception ex){
 		LOG.info("exceptionHandler - START");
 
@@ -46,4 +46,5 @@ public class RestExceptionHandler {
 		LOG.info("exceptionHandler - END");
 		return new ResponseEntity<>(responseMessage, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
 }

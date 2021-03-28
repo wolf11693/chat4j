@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
-public class SecurityManagerChatApplication {
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SecurityManagerChatApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 	@Bean

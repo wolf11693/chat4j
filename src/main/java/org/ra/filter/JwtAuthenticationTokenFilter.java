@@ -22,7 +22,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 
-	private static final String LOGIN_PATH = "/login";
+	private static final String AUTH_PATH = "/authenticate";
 
 	@Value("${jwt.header}")
 	private String tokenHeader;
@@ -52,9 +52,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 			if (isValidToken) {
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				String usernameUserSession = (String) request.getSession().getAttribute("username");
-				String path = request.getServletPath();
+				String requestPath = request.getServletPath();
 				
-				if(path.equals(LOGIN_PATH) || ( usernameUserSession != null && usernameUserSession.equals(authentication.getName())) ) {
+				if(requestPath.equals(AUTH_PATH) || ( usernameUserSession != null && usernameUserSession.equals(authentication.getName())) ) {
 					authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 				}

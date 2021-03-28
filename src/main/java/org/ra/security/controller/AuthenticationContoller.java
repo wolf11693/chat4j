@@ -54,7 +54,7 @@ public class AuthenticationContoller {
 		authResponse.setJwtToken(jwtToken);
 		authResponse.setUsername(username);
 
-		LOG.info("<< [ {}\n     {}\n     {} ]", authResponse.getUsername(), authResponse.isAuthenticated(), authResponse.getJwtToken());
+		LOG.info("<< [ username={}, authenticated={}, token={} ]", authResponse.getUsername(), authResponse.isAuthenticated(), authResponse.getJwtToken());
 		LOG.info("createAuthenticationToken - END");
 		return new ResponseEntity<>(authResponse, HttpStatus.OK);
 	}

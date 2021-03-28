@@ -89,7 +89,10 @@ public class JwtTokenUtil implements Serializable {
 								   .collect(Collectors.toList());
 			}
 
-			return new JwtUser(claims.getSubject(), "", authorities, (boolean) claims.get(CLAIM_KEY_IS_ENABLED));
+			JwtUser jwtUser = new JwtUser(claims.getSubject(), "", authorities, (boolean) claims.get(CLAIM_KEY_IS_ENABLED));
+
+			return jwtUser;
+			
 		} catch (Exception ex) {
 			LOG.error("invalid jwt token",  ex);
 			return null;
