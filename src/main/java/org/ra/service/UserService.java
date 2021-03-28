@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
 		return userRetrieved;
 	}
 	
-	public UserModel saveUser(UserModel userToSave) throws Exception {
+	public UserModel save(UserModel userToSave) throws Exception {
 		String password = userToSave.getPassword();
 		
         String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
