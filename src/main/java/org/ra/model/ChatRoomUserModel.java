@@ -3,12 +3,15 @@ package org.ra.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 /** 
  * This model is a wrapper for all chats of particular user 
  * 
  * @author Roberto
  * 
  * */
+@Document(value = "chatRoom")
 public class ChatRoomUserModel {
 
 	private String id;

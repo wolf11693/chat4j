@@ -1,6 +1,5 @@
 package org.ra.service;
 
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +19,7 @@ public class ChatRoomUserService {
 	private static final Logger LOG = LoggerFactory.getLogger(ChatRoomUserService.class);
 	
 	@Autowired
-	@Qualifier(value = "dataMongoRepository")
+	@Qualifier(value = "dataChatRoomUserMongoRepository")
 	private ChatRoomUserRepository chatRoomUserRepository;
 	
 	public Set<ChatModel> getAllChatByUsername(String username){

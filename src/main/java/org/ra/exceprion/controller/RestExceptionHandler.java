@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class RestExceptionHandler {
 
 	public class ResponseMessage {
-		private String message;
+		private String message = "Generic Error";
 		private Long timestamp;
 		
 		public String getMessage() {
@@ -35,12 +35,14 @@ public class RestExceptionHandler {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(RestExceptionHandler.class);
 	
-	@ExceptionHandler()
-	public ResponseEntity<ResponseMessage> exceptionHandler(Exception ex){
+	@ExceptionHandler(value = {Throwable.class})
+	public ResponseEntity<ResponseMessage> exceptionHandler(Throwable ex){
 		LOG.info("exceptionHandler - START");
 
 		ResponseMessage responseMessage = new ResponseMessage();
-		responseMessage.setMessage(ex.getMessage());
+		if(ex.getMessage() != null) {
+			responseMessage.setMessage(ex.getMessage());
+		}
 		responseMessage.setTimestamp(new Date().getTime());
 		
 		LOG.info("exceptionHandler - END");

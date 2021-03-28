@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.ra.request.AuthenticationRequest;
 import org.ra.request.AuthenticationResponse;
 import org.ra.service.AuthenticatonService;
+import org.ra.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class AuthenticationContoller {
 
 	@Autowired
 	private AuthenticatonService authService;
+	
+	@Autowired
+	private UserService userService;
 
 	@PostMapping(path = "/authenticate")
 	public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest, HttpServletResponse response, HttpSession session) throws Exception {
@@ -40,12 +44,12 @@ public class AuthenticationContoller {
 		String username = authRequest.getUsername();
 		String password = authRequest.getPassword();
 
+		if(!this.userService.existUserWithUsername(username)) {
+			throw new Exception("user with username: '" + username + "' not exists!");
+		} 
+		
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 		String jwtToken = this.authService.authenticate(usernamePasswordAuthenticationToken, session);
-
-		if (jwtToken == null || jwtToken.trim().equals("")) {
-			throw new Exception("token not valid");
-		}
 
 		response.setHeader(tokenHeader, jwtToken);
 

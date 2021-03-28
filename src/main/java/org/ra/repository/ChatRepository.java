@@ -14,6 +14,7 @@ import org.ra.model.MongoCollectionEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.client.MongoCollection;
@@ -27,8 +28,11 @@ public class ChatRepository {
 	private MongoCollection<Document> collection;
 	
 	@Autowired
+	private MongoTemplate mongoTemplate;
+	
+	@Autowired
 	public ChatRepository(Map<String, MongoCollection<Document>> collections) {
-		collection = collections.get(MongoCollectionEnum.CHAT_USER_COLLECTION.getValue());
+		collection = collections.get(MongoCollectionEnum.CHAT_ROOM_COLLECTION.getValue());
 	}
 	
 	public List<ChatModel> findAll() {

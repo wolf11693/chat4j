@@ -1,21 +1,33 @@
 package org.ra.repository;
 
 import java.util.List;
+import java.util.Map;
 
+import org.bson.Document;
 import org.ra.model.ChatRoomUserModel;
+import org.ra.model.MongoCollectionEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.mongodb.client.MongoCollection;
+
 @Repository
 public class ChatRoomUserRepositoryImpl {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ChatRoomUserRepositoryImpl.class);
 
+	private MongoCollection<Document> collection;
+
 	@Autowired
 	private MongoTemplate MongoTemplate;
+
+	@Autowired
+	public ChatRoomUserRepositoryImpl(Map<String, MongoCollection<Document>> collections) {
+		collection = collections.get(MongoCollectionEnum.CHAT_ROOM_COLLECTION.getValue());
+	}
 	
 	public List<ChatRoomUserModel> findAll() {
 		LOG.debug("findAll - START");

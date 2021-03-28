@@ -2,7 +2,7 @@ package org.ra.model;
 
 public enum MongoCollectionEnum {
 
-	CHAT_USER_COLLECTION("chatUserModel"),
+	CHAT_ROOM_COLLECTION("chatRoom"),
 	USER_COLLECTION("user");
 	
 	private String value;
