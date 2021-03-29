@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,8 +24,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 	
 	@Override
+	public void configure(WebSecurity webSecurity) throws Exception {
+		  webSecurity.ignoring()
+		  				.antMatchers("/api/v1/auth/**",
+					                 "/v2/api-docs",
+					                 "/configuration/ui",
+					                 "/swagger-resources/**",
+					                 "/configuration/security",
+					                 "/swagger-ui.html",
+					                 "/webjars/**");
+	}
+
+	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
+					.requiresChannel().anyRequest().requiresSecure()
+			        	.and()
 					.csrf().disable()
 					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 						.and()
