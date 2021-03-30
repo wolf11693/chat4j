@@ -1,7 +1,12 @@
 package org.ra.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
+import org.ra.listner.MySessionListner;
+import org.ra.manager.SessionManager;
 import org.ra.util.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,19 +21,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthenticatonService {
+public class AuthenticationService {
 
-	public static final Logger LOG = LoggerFactory.getLogger(AuthenticatonService.class);
+	public static final Logger LOG = LoggerFactory.getLogger(AuthenticationService.class);
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
+	private MySessionListner sessionListner;
+			
+	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-
 	
 	public String authenticate(UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken, HttpSession session) throws Exception {
 		String token = null;
@@ -48,7 +55,9 @@ public class AuthenticatonService {
 			
 			final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 			token = this.jwtTokenUtil.generateToken(userDetails);
-			session.setAttribute("username", userDetails.getUsername());
+			
+			SessionManager sessionManager = this.sessionListner.getSessionManager();
+			sessionManager.addUsernameUserToSession(userDetails.getUsername());
 		} 
 		
 		return token;
@@ -62,6 +71,11 @@ public class AuthenticatonService {
 		}
 		
 		return refreshedToken;
-		
+	}
+	
+	
+	public void shutdownAuthenticationUser(String username) {
+		SessionManager sessionManager = this.sessionListner.getSessionManager();
+		sessionManager.getUsernameUserInSession().remove(username);
 	}
 }

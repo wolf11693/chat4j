@@ -1,16 +1,18 @@
 package org.ra.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.ra.model.ChatModel;
 import org.ra.model.ChatRoomUserModel;
 import org.ra.model.UserModel;
-import org.ra.repository.ChatRoomUserRepository;
+import org.ra.repository.ChatRoomUserRepositoryImpl;
+import org.ra.repository.datamongo.ChatRoomUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,16 +21,31 @@ public class ChatRoomUserService {
 	private static final Logger LOG = LoggerFactory.getLogger(ChatRoomUserService.class);
 	
 	@Autowired
-	@Qualifier(value = "dataChatRoomUserMongoRepository")
 	private ChatRoomUserRepository chatRoomUserRepository;
 	
-	public Set<ChatModel> getAllChatByUsername(String username){
-		LOG.info("getAllChat - START - username={}");
+	public Set<ChatRoomUserModel> getAllChatRoom(){
+		LOG.info("getAllChatRoom - START");
+
+		List<ChatRoomUserModel> chatRoomList = this.chatRoomUserRepository.findAll();
+		if(chatRoomList == null) {
+			chatRoomList = new ArrayList<>();
+		}
+		Set<ChatRoomUserModel> chatRoomsRetrieved = new HashSet<>(chatRoomList);
 		
-		Set<ChatModel> chatsRetrieved = new HashSet<>();
+		LOG.info("getAllChatRoom - END - retrieved n° {} chatRooms", chatRoomsRetrieved.size());
+		return chatRoomsRetrieved;
+	}
+	
+	public Set<ChatRoomUserModel> getChatRoomByUsername(String username){
+		LOG.info("getChatRoomByUsername - START - username={}", username);
 		
-		LOG.info("getAllChat - END - retrieved n° {} chats", chatsRetrieved.size());
-		return chatsRetrieved;
+		Set<ChatRoomUserModel> chatRoomFiltered =  this.getAllChatRoom()
+															.stream()
+															.filter(chatRoom -> chatRoom.getUserOwner().getUsername().equals(username))
+															.collect(Collectors.toSet());
+		
+		LOG.info("getChatRoomByUsername - END - retrieved n° {} chatRooms", chatRoomFiltered.size());
+		return chatRoomFiltered;
 	}
 	
 	public ChatRoomUserModel createChatRoomUser(UserModel userOwnerChatRoom) {
@@ -52,6 +69,5 @@ public class ChatRoomUserService {
 		LOG.info("save - END - id={}", chatRoomUserSaved);
 		return chatRoomUserSaved;
 	}
-	
 	
 }

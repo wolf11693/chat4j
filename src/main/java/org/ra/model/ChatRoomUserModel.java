@@ -50,8 +50,9 @@ public class ChatRoomUserModel {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+
+		result = prime * result + ( (id == null) ? 0 : id.hashCode() );
+		result = prime * result + ( (userOwner == null) ? 0 : userOwner.hashCode() );
 		
 		return result;
 	}
@@ -65,8 +66,7 @@ public class ChatRoomUserModel {
 		if (obj == null) {
 			return false;
 		}
-		
-		if (this.getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass()) {
 			return false;
 		}
 		
@@ -76,6 +76,13 @@ public class ChatRoomUserModel {
 				return false;
 			}
 		} else if ( !id.equals(other.id) ) {
+			return false;
+		}
+		if (userOwner == null) {
+			if (other.userOwner != null) {
+				return false;
+			}
+		} else if ( !userOwner.equals(other.userOwner) ) {
 			return false;
 		}
 		

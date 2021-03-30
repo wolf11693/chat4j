@@ -3,9 +3,7 @@ package org.ra.controller;
 import java.security.Principal;
 import java.util.Set;
 
-import org.ra.adapter.ChatAdapter;
-import org.ra.model.ChatModel;
-import org.ra.response.ChatRoomUserResponse;
+import org.ra.model.ChatRoomUserModel;
 import org.ra.service.ChatRoomUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,25 +21,29 @@ public class ChatRoomUserController {
 	@Autowired
 	private ChatRoomUserService chatRoomUserService;
 	
-	@Autowired
-	private ChatAdapter chatAdapter;
-	
 	@GetMapping("/chatroom")
-	public ResponseEntity<ChatRoomUserResponse> getAllChat(Principal principal) {
-		LOG.info("getAllChat - START - username={}", principal != null? principal.getName(): null);
+	public ResponseEntity<Set<ChatRoomUserModel>> getAllChatRooms() {
+		LOG.info("getAllChatRooms - START");
 		LOG.info(">> GET /chatroom");
 		
+		Set<ChatRoomUserModel> chatRoomsRetrieved = this.chatRoomUserService.getAllChatRoom();
+		
+		LOG.info("<< [ n° {} items ]", chatRoomsRetrieved.size());
+		LOG.info("getAllChatRooms - END");
+		return new ResponseEntity<>(chatRoomsRetrieved, HttpStatus.OK);
+	}
+	
+	@GetMapping("/chatroom/userLogged")
+	public ResponseEntity<Set<ChatRoomUserModel>> getChatRoomUserLogged(Principal principal) {
+		LOG.info("getChatRoomUserLogged - START - usernameUserLogged={}", principal.getName());
+		LOG.info(">> GET /chatroom/userLogged");
+		
 		String username = principal.getName();
-		Set<ChatModel> chatsRetrieved = this.chatRoomUserService.getAllChatByUsername(username);
+		Set<ChatRoomUserModel> chatRoomsRetrieved = this.chatRoomUserService.getChatRoomByUsername(username);
 		
-		ChatRoomUserResponse chatRoomUserResponse = new ChatRoomUserResponse();
-		chatRoomUserResponse.setUsername(username);
-		chatRoomUserResponse.setChats(this.chatAdapter.adaptChatsModel(chatsRetrieved));
-		
-		LOG.info("<< [ username={}, numeberChats={} ]", username, chatsRetrieved.size());
-		LOG.info("getAllChat - END");
-		
-		return new ResponseEntity<>(chatRoomUserResponse, HttpStatus.OK);
+		LOG.info("<< [ usernameUserLogged={}, n° {} items ]", username, chatRoomsRetrieved.size());
+		LOG.info("getAllChatRooms - END");
+		return new ResponseEntity<>(chatRoomsRetrieved, HttpStatus.OK);
 	}
 	
 }

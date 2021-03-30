@@ -6,7 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.ra.request.AuthenticationRequest;
 import org.ra.request.AuthenticationResponse;
-import org.ra.service.AuthenticatonService;
+import org.ra.service.AuthenticationService;
 import org.ra.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class AuthenticationContoller {
 	private String tokenHeader;
 
 	@Autowired
-	private AuthenticatonService authService;
+	private AuthenticationService authService;
 	
 	@Autowired
 	private UserService userService;
@@ -45,7 +45,7 @@ public class AuthenticationContoller {
 		String password = authRequest.getPassword();
 
 		if(!this.userService.existUserWithUsername(username)) {
-			throw new Exception("user with username: '" + username + "' not exists!");
+			throw new Exception("error in authentiacate user!");
 		} 
 		
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);

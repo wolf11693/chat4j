@@ -38,8 +38,7 @@ public class ChatRepository {
 	public List<ChatModel> findAll() {
 		LOG.debug("findAll - START");
 
-		// TODO Auto-generated method stub
-
+		
 		LOG.debug("findAll - END");
 		return null;
 	}

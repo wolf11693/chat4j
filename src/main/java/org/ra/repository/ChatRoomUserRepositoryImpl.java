@@ -12,27 +12,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 
-@Repository
+@Repository(value = "chatRoomUserRepository")
 public class ChatRoomUserRepositoryImpl {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ChatRoomUserRepositoryImpl.class);
 
-	private MongoCollection<Document> collection;
+	private MongoCollection<Document> chatRoomCollection;
 
 	@Autowired
 	private MongoTemplate MongoTemplate;
 
 	@Autowired
 	public ChatRoomUserRepositoryImpl(Map<String, MongoCollection<Document>> collections) {
-		collection = collections.get(MongoCollectionEnum.CHAT_ROOM_COLLECTION.getValue());
+		chatRoomCollection = collections.get(MongoCollectionEnum.CHAT_ROOM_COLLECTION.getValue());
 	}
 	
 	public List<ChatRoomUserModel> findAll() {
 		LOG.debug("findAll - START");
 
-		// TODO Auto-generated method stub
+		FindIterable<Document> iterable = this.chatRoomCollection.find();
+		
+		MongoCursor<Document> cursor = iterable.iterator();
+		System.out.println("Student list with cursor: ");
+		while (cursor.hasNext()) {
+		    System.out.println(cursor.next().toJson());
+		}
 
 		LOG.debug("findAll - END");
 		return null;

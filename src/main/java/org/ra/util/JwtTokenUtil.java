@@ -49,7 +49,7 @@ public class JwtTokenUtil implements Serializable {
 	@Autowired
 	ObjectMapper objectMapper;
 
-	public Boolean validateToken(String token, UserDetails userDetails) {
+	public Boolean validateToken(String token, UserDetails userDetails) throws Exception {
 		JwtUser user = (JwtUser) userDetails;
 		
 		final String username = this.getUsernameFromToken(token);
@@ -57,7 +57,7 @@ public class JwtTokenUtil implements Serializable {
 		return  username.equals(user.getUsername()) && !isTokenExpired(token);
 	}
 	
-	public String getUsernameFromToken(String jwtToken) {
+	public String getUsernameFromToken(String jwtToken) throws Exception {
 		String username = null;
 		
 		try {
@@ -65,13 +65,13 @@ public class JwtTokenUtil implements Serializable {
 			username = claims.getSubject();
 		} catch (Exception ex) {
 			LOG.error("invalid jwt token",  ex);
-			username = null;
+			throw new Exception("invalid jwt token");
 		}
 
 		return username;
 	}
 
-	public JwtUser getUserDetailsFromToken(String jwtToken) {
+	public JwtUser getUserDetailsFromToken(String jwtToken) throws Exception {
 		if (jwtToken == null) {
 			return null;
 		}
@@ -95,7 +95,7 @@ public class JwtTokenUtil implements Serializable {
 			
 		} catch (Exception ex) {
 			LOG.error("invalid jwt token",  ex);
-			return null;
+			throw new Exception("invalid jwt token");
 		}
 
 	}

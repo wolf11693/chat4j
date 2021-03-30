@@ -1,6 +1,8 @@
 package org.ra.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.ra.adapter.UserAdapter;
 import org.ra.model.UserModel;
@@ -32,6 +34,22 @@ public class UserService implements UserDetailsService {
 		JwtUser jwtUser = this.userAdapter.adaptJwtUser(userRetrived);
 
 		return jwtUser;
+	}
+	
+	public List<UserModel> getAll() {
+		 List<UserModel> usersRetrieved = this.userRepository.findAll();
+		
+		return usersRetrieved;
+	}
+	
+	public List<UserModel> getOtherUser(String username) {
+		List<UserModel> usersRetrieved = this.getAll();
+		
+		List<UserModel> otherUser = usersRetrieved.stream()
+					  							  .filter(user -> !user.getUsername().equals(username))
+					  							  .collect(Collectors.toList());
+		
+		return otherUser;
 	}
 	
 	public UserModel getUser(String id) {
